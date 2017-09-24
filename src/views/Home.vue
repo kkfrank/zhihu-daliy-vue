@@ -1,43 +1,75 @@
 <template>
 	<div>
-		<Slider :list="topList"></Slider>
-		<list :list="list"></list>
+		<TopHeader title="首页">
+			<span @click="showLeftBar" class="navbar-left" slot="left">
+				<icon name="bars" scale=1.2></icon>
+			</span>
+
+			<div class="navbar-right" slot="right" v-show="type=='list'">
+				<span><icon name="bell-o"></icon></span>
+				<span><icon name="ellipsis-v"></icon></span>	
+			</div>
+<!-- 
+			<div class="navbar-right-theme" slot="right" v-show="type=='theme'">
+				<icon name="plus-circle" scale=1.2></icon>
+			</div> -->
+
+		</TopHeader>
+
+		<LeftBar></LeftBar>
+		<div class="main">
+			<TopImgBox :sliderList="sliderList"></TopImgBox>
+			<List :list="homeDataList"></List>
+		</div>
 	</div>
 </template>
 
 <script>
-	import Slider from '../components/Slider.vue'
+	import TopHeader from '../components/TopHeader'
+	import LeftBar from '../components/LeftBar.vue'
+	import TopImgBox from '../components/TopImgBox.vue'
 	import List from '../components/List.vue'
 	import axios from 'axios'
+	import API from '../constants/index.js'
+	import moment from 'moment'
+	const today=moment().format('YYYYMMDD')
 	export default{
+		created:function(){
+		    //this.getNews()
+		    this.$store.dispatch({
+		    	type:"getHomeListToday"
+		    })
+		},
+	 	methods:{
+			showLeftBar(){
+				this.$store.commit('showLeftBar')
+			},
+		},
 		components:{
-			Slider,
+			TopHeader,
+			LeftBar,
+			TopImgBox,
 			List
 		},
-		data(){
-			return{
-				topList:[],
-				list:[]
+		computed:{
+			type(){
+				return this.$store.state.topBar.type
+			},
+			homeDataList(){
+				//return this.$store.state.home.homeList
+				console.log('homeListTillDay',this.$store.getters.homeListTillDay)
+				if(this.$store.getters.homeListTillDay.length===0){
+					return []
+				}
+				return this.$store.getters.homeListTillDay
+			},
+			sliderList(){
+				if(!this.$store.state.home.homeList[0]){
+					return []
+				}
+				return this.$store.state.home.homeList[0].top_stories || []
 			}
-		},
-		created:function(){
-			console.log('me')
-		    this.getNews()
-		  },
-		  methods:{
-		      getNews:function(){
-		        axios.get('http://127.0.0.1:9001/api/4/news/latest')
-		          .then(data=>{
-		          	this.topList=data.data.top_stories
-		          	this.list=data.data.stories
-		            console.log(data)
-		          })
-		          .catch(err=>{
-		            console.log(err)
-		          })
-
-		      }
-		  }
+		}
 	}
 </script>
 

@@ -1,11 +1,14 @@
+var BundleAnalyzerPlugin=require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+var webpack=require('webpack')
 module.exports={
 	entry:{
-		app:'./src/index.js',
+		bundle:'./src/index.js',
+		vendor:['vue-awesome','vue','vue-router','moment','vue-awesome/icons','vuex','axios','es6-promise']
 	},
 	output:{
 		publicPath:"/assets",
 		path:__dirname+'/dist',
-		filename:'bundle.js'
+		filename:'[name].js'
 	},
 	module:{
 		rules:[{
@@ -19,6 +22,7 @@ module.exports={
 			}]
 		},{
 			test:/\.js$/,
+			exclude:/node_modules/,
 			use:[{
 				loader:'babel-loader'
 			}]
@@ -35,6 +39,7 @@ module.exports={
 		}]
 	},
 	resolve:{
+		extensions:['.js','.vue'],
 		alias:{
 			'vue':'vue/dist/vue.js'
 		}
@@ -43,5 +48,11 @@ module.exports={
 		//compress:true
 		port:9000
 	},
-	devtool:'cheap-eval-source-map'
+	devtool:'cheap-eval-source-map',
+	plugins:[
+		new BundleAnalyzerPlugin(),
+		new webpack.optimize.CommonsChunkPlugin({
+			name:"vendor"
+		})
+	]
 }

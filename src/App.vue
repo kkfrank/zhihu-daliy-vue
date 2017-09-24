@@ -1,21 +1,14 @@
 <template>
 	<div>
-		<header class="navbar">
-			<icon name="bars" scale=1 class="navbar-icon"></icon> 
-			<span class="navbar-span-title">首页</span>
-			<icon name="bell-o" scale=1 class="navbar-icon"></icon> 
-			<icon name="ellipsis-v" scale=1 class="navbar-icon"></icon> 
-		</header>
+		<!-- <TopBar/> -->
+		<div class="loading"></div>
 		<router-view></router-view>
 	</div>
 </template>
 
 <script>
-	import 'vue-awesome/icons'
-	//import Icon from 'vue-awesome/components/Icon'
-	import Icon from 'vue-awesome/components/Icon.vue'
-	//Vue.component('icon',Icon)
-	import Home from './views/Home.vue'
+	import TopBar from './components/TopBar'
+	//import Home from './views/Home.vue'
 
 	export default{
 		data(){
@@ -23,14 +16,72 @@
 				msg:"hello world"
 			}
 		},
+		
 		components:{
-			Icon,
-			Home
+			TopBar,
+		},
+		computed:{
+			type:function(){
+				return this.$store.state.topBar.type
+			}
+		},
+		created(){
+			var that=this,type=this.type,isUp=true
+		    window.addEventListener('scroll',function(ev){
+		    	//console.log(document.body.scrollTop)
+		    	if(document.body.scrollTop===0){//到顶了
+		    		console.log('到顶了',type)
+		    		isUp=true
+		    	}else{
+		    		isUp=false
+		    	}
+		    	if(document.body.scrollTop+document.documentElement.clientHeight>=document.documentElement.scrollHeight){
+		    		console.log('到底了',type)
+		    		if(type==="list" || type==="theme"){
+		    			that.$store.dispatch({
+			    			type:"loadMore"
+			    		})	
+		    		}
+		    	}
+		    	//console.log(document.body.scrollTop,window.innerHeight,document.documentElement.clientHeight,document.documentElement.scrollHeight)
+		    })
+		    var validTouch=false,startY=0,prevMoveY=0
+	
+		    window.addEventListener('touchstart',function(ev){
+		    	var main=document.querySelector('.main')
+		    	if(isUp && (ev.target===main || main.contains(ev.target))){//滑动的是main元素
+		    		validTouch=true
+		    		prevMoveY=startY=ev.touches[0].pageY
+		    	}else{
+		    		validTouch=false
+		    	}
+		    })
+	      	window.addEventListener('touchmove',function(ev){
+  			    var loading=document.querySelector('.loading')
+	      		if(!validTouch){
+	      			return
+	      		}
+	      		var y=ev.touches[0].pageY
+	      		var prevY=parseInt(loading.style.top || 0)
+	      		var changedY=y-prevMoveY
+	      		prevMoveY=y
+	      		y=prevY+changedY
+	      		if(y>=100) y=100
+      		    loading.style.top=y+"px"
+		    })
+	        window.addEventListener('touchend',function(ev){
+	        	if(!validTouch){
+	      			return
+	      		}
+	      		that.$store.dispatch('getHomeListToday')
+	      		var loading=document.querySelector('.loading')
+	      		loading.style.top=0
+		    })
 		}
 	}
 </script>
 
-<style lang="scss">
+<style>
 	html,body{
 		width: 100%;
 		height:100%;
@@ -40,25 +91,31 @@
 		padding: 0;
 		box-sizing:border-box;
 	}
-	h1{
-		color:red;
+	li{
+		list-style: none;
 	}
-	.navbar{
-		position: absolute;
-		top: 0;
-		left: 0;
-		width:100%;
-		display: flex;
-		align-items:center;
-		height:50px;
-		background-color: #00a2ea;
-		color:#fff;
-		z-index: 1;
+	.loading{
+	    position: fixed;
+	    width: 40px;
+	    height: 40px;
+	    z-index: 1;
+	    left: 44%;
+	    top: 0;
+	    border: 4px solid green;
+	    border-radius: 50%;
+	    border-right: 4px solid transparent;
+	    border-top: 4px solid transparent;
+	    transform: rotate(45deg);
+	    animation: rotate .6s infinite linear;
+	    margin-top: 11px;
 	}
-	.navbar-span-title{
-		flex:6;
-	}
-	.navbar-icon{
-		flex:1;
+
+	@keyframes rotate{
+		from {
+			transform: rotate(45deg);
+		}
+		to{
+			transform: rotate(405deg);
+		}
 	}
 </style>
