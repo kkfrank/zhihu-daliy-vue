@@ -1,74 +1,40 @@
 <template>
 	<div class="list-box">
-		<div v-for="data in newList">
-			<h3 v-if="type==='list'" class="list-title">
-				{{data.date===today ? "今日新闻" :data.date}}
-			</h3>
-			<router-link v-else to="/editors" class="list-title">
+			<router-link to="/editors" class="list-title">
 				<h3>主编</h3>
-				<img v-for="item in data.editors" :src="item.avatar.replace('http:','https:')"></img>
+				<img v-for="item in newList.editors" :src="item.avatar.replace('http:','https:')"></img>
 			</router-link>
-	
+
 			<ul>
-				<li v-for="item in data.stories">
+				<li v-for="item in newList.stories">
 					<router-link :to="'/detail/'+item.id">
 						<span>{{item.title}}</span>
 						<img v-if="item.images" v-bind:src="item.images && item.images[0].replace('http:','https:')">
 					</router-link>
 				</li>
 			</ul>	
-		</div>
 	</div>
 </template>
 
 <script>
-	import logo from '../assets/logo.png'
-	require('es6-promise').polyfill();
 	import moment from 'moment'
+	require('es6-promise').polyfill();
 	export default{
-		mounted(){
-			//console.log('list',this.list)
-			//var data=this.list[0]
-			//console.log(data.data)
-		},
 		data(){
 			return{
-				today:moment().add(0,'days').format('YYYYMMDD'),
-				url:logo,
-				stories:function(){
-					if (true) {
-
-					}
-				}
-				//list:[]
+				today:moment().add(0,'days').format('YYYYMMDD')
 			}
 		},
 		computed:{
-			type:function(){
-				return this.$store.state.topBar.type
-			},
 			newList(){
-				if(this.type==='list'){
-					return this.list
+				var data={...this.list[0]}
+				for(var i=1,item;item=this.list[i++];){
+					data.stories=data.stories.concat(item.stories)
 				}
-				for(var i=1,item=this.list[i++];item;i++){
-					//this.list[0].stories={...this.list[0].stories,...item.stories}
-					//this.list[0].stories.concat(item.stories)
-				}
-				//console.log('123456',this.list)
-				return this.list[0]
+				return {...data}
 			},
-			editorList(){
-				return this.$store.state.editorList
-			}
-		
-			
 		},
-		//props:['list','data'],
 		props:['list'],
-		components:{
-			//logo
-		}
 	}
 </script>
 

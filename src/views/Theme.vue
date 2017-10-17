@@ -14,7 +14,7 @@
 		<LeftBar></LeftBar>
 		<div class="main">
 			<TopImgBox :sliderList="sliderList" ></TopImgBox>
-			<List :list="themeDataList"></List>
+			<List :list="themeList"></List>
 		</div>
 	</div>
 </template>
@@ -23,17 +23,29 @@
 	import TopHeader from '../components/TopHeader'
 	import LeftBar from '../components/LeftBar.vue'
 	import TopImgBox from '../components/TopImgBox.vue'
-	import List from '../components/List.vue'
-	import axios from 'axios'
-	import API from '../constants/index.js'
+	import List from '../components/themeList.vue'
+	
 	export default{
 		created:function(){
-		    //this.getNews()
-		    //console.log(this.$route.params.id)
-		    this.$store.dispatch({
+		/*    this.$store.dispatch({
 		    	type:"getThemeListNow",
 		    	id:this.$route.params.id
-		    })
+		    })*/
+	    	this.$store.commit('setTopBar',{type:"theme"})
+		},
+		beforeRouteEnter(to,from,next){
+			next(vm=>{
+				if(!from.path.match(/^\/detail/) || vm.themeList.length===0){
+					//console.log('vm.themeList',vm.themeList)
+					vm.$store.dispatch({//获取当天列表的数据
+		    			type:"getThemeListNow",
+	    				id:vm.$route.params.id
+				    })
+				}else{//从详情页面返回
+					vm.$store.commit('setScrollTop')	
+				}
+			})
+			
 		},
 	 	methods:{
 			showLeftBar(){
@@ -47,31 +59,17 @@
 			List
 		},
 		computed:{
-			themeDataList(){
+			themeList(){
 				const id=this.$route.params.id
-				//const today=moment().format('YYYYMMDD')
-				//console.log('today',this.$store.getters.homeDataList)
-
-				//return this.$store.state.homeTodayData
-				//console.log(id,this.$store.state.theme.themeList[id])
-				return this.$store.state.theme.themeList[id]//.homeDataList
+				return this.$store.state.theme.themeList[id]
 			},
 			name(){
-				console.log(this.$store.state.topBar.name)
+				//console.log(this.$store.state.topBar.name)
 				return this.$store.state.topBar.name
 			},
-		/*	list:function(){
-				return this.$store.state.list
-			},*/
 			sliderList(){
 				const id=this.$route.params.id
-				if(this.$store.state.theme.themeList[id][0]){
-					return this.$store.state.theme.themeList[id][0].background
-				}
-				return ''
-				//return this.$store.state.home.homeList[0].top_stories || []
-				console.log('sliderList',this.$store.state.theme.themeList[id])
-				return this.$store.state.theme.themeList[id][0].background || ''
+				return this.$store.state.theme.themeList[id]
 			}
 		}
 	}

@@ -1,78 +1,69 @@
-import axios from 'axios'
-import moment from 'moment'
+import API from '../api/index.js'
 
-import API from '../constants/index.js'
-
-let today=moment().format('YYYYMMDD')
 const moduleTheme={
 	state:{
-		searchDay:today,
+		themeTypes:[],
 		themeList:{
+			2:[],//开始游戏
+			3:[],//电影日报
+			4:[],//设计日报
+			5:[],//大公司日报
+			6:[],//财经日报
+			7:[],//音乐日报
+			9:[],//动漫日报
+			8:[],//体育日报
+			10:[],//互联网安全
 			11:[],//不许无聊
 			12:[],//用户推荐日报
 			13:[]//日常心理学
-		}
+		},
+		//editorList:[]
 	},
-	getters:{},
+	getters:{
+	},
 	mutations:{
-		setThemeList(state,{type,data}){
-			console.log('setThemeList',type,data)
-			console.log(state.themeList)
-			if(state.searchDay===today){//刷新
-			/*	Vue.set(state.themeList[type],'0',{
-						data
-				})*/
+		setThemeTypes(state,data){
+			state.themeTypes=data
+		},
+		setThemeList(state,{type,data,fresh}){
+			if(fresh){//刷新
 				state.themeList[type]=[{...data}]
-			/*	state.themeList[type][0]={
-					//date:time,
-					data:{//和主页面的数据结构保持一致，方便list重用
-						data
-					}
-				}*/
-			/*	state.themeList[type].push({
-					//date:time,
-					data:{//和主页面的数据结构保持一致，方便list重用
-						data
-					}
-				})*/
-		/*		state.themeList[type].splice(0,1)
-				state.themeList[type].unshift({
-					data:{//和主页面的数据结构保持一致，方便list重用
-						data
-					}
-				})*/
 			}else{
-				state.themeList[type].push({
-					//date:time,
-					data	
-				})	
+				state.themeList[type].push({...data})	
 			}
 		}
 	},
 	actions:{
+		getThemesTypes(context){
+			API.getThemesTypes()
+				.then(data=>{
+					context.commit('setThemeTypes',data.data.others)
+				})
+				.catch(err=>{
+					console.error(err)
+				})
+		},
 		getThemeListNow(context,{id},rootState,rootGetters){
 			context.commit('hideLeftBar')
-			today=moment().format('YYYYMMDD')
-			context.commit('setSearchDay',today)
-
-			axios.get(API.themesIDList+id)
+			context.commit('setLoading',true)
+			//context.commit('setPrevScrollTop',0)
+			document.body.scrollTop=0
+			API.getThemeListNow(id)
 				.then(data=>{
-					console.log('theme',data)
 					context.commit('setThemeList',{
 						type:id,
 						data:data.data,
-						//time:today
+						fresh:true
 					})
-					//context.commit('setList',data.data.stories)
-					//context.commit('setEditorList',data.data.editors)
-					//context.commit('setSliderList',data.data.background || data.data.top_stories)
 					context.commit("setTopBar",{
 						type:"theme",
 						name:data.data.name
 					})
+					context.commit('setEditorList',data.data.editors)
+					context.commit('setLoading',false)
 				})
 				.catch(err=>{
-
+					context.commit('setLoading',false)
 				})
 		}
 	}

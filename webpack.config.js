@@ -1,5 +1,7 @@
-var BundleAnalyzerPlugin=require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 var webpack=require('webpack')
+var BundleAnalyzerPlugin=require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+var ExtractTextPlugin=require('extract-text-webpack-plugin')
+
 module.exports={
 	entry:{
 		bundle:'./src/index.js',
@@ -11,7 +13,8 @@ module.exports={
 		filename:'[name].js'
 	},
 	module:{
-		rules:[{
+		rules:[
+	/*	{
 			test:/\.scss$/,
 			use:[{
 				loader:'style-loader'
@@ -20,16 +23,21 @@ module.exports={
 			},{
 				loader:'sass-loader'
 			}]
-		},{
+		},*/
+		{
+			test:/\.vue$/,
+			use:[{
+				loader:'vue-loader',
+				options:{
+					extractCSS:true
+				}
+			}]
+		},
+		{
 			test:/\.js$/,
 			exclude:/node_modules/,
 			use:[{
 				loader:'babel-loader'
-			}]
-		},{
-			test:/\.vue$/,
-			use:[{
-				loader:'vue-loader'
 			}]
 		},{
 			test:/\.(png|jpg|gif)$/,
@@ -50,9 +58,31 @@ module.exports={
 	},
 	devtool:'cheap-eval-source-map',
 	plugins:[
-		new BundleAnalyzerPlugin(),
+		//new BundleAnalyzerPlugin(),
 		new webpack.optimize.CommonsChunkPlugin({
 			name:"vendor"
-		})
+		}),
+		//new ExtractTextPlugin('style.css')
+		new ExtractTextPlugin('[name].css')
 	]
+}
+if(process.env.NODE_ENV==='production'){
+	//module.exports.devtool="#source-map"
+	module.exports.devtool=false
+	module.exports.plugins=(module.exports.plugins || []).concat([
+		new webpack.DefinePlugin({
+			'process.env':{
+				NODE_ENV:"production"
+			}
+		}),
+		new webpack.optimize.UglifyJsPlugin({
+			compress:{
+				warnings:false
+			}
+		})
+	])
+}else{
+	module.exports.plugins=(module.exports.plugins || []).concat([
+		new BundleAnalyzerPlugin()
+	])
 }

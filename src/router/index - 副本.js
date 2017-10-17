@@ -16,21 +16,31 @@ const routes=[{
 	component:About
 },{
 	path:'/detail/:id',
-	component:Detail
+	//component:Detail,
+	components:{
+		main:Detail
+	}
 },{
 	path:"/theme/:id",
-	component:Theme
+	components:{
+		main:Theme,
+		leftbar:LeftBar
+	}
 },{
 	path:"/editors",
-	component:EditorList
-	
+	components:{
+		main:EditorList
+	}
 },{
 	path:"/editor/:id",
 	component:EditorItem
 },
 {
 	path:'/',
-	component:Home,
+	components:{
+		main:Home,
+		leftbar:LeftBar
+	},
 /*	beforeEnter(to,from,next){
 		console.log('enter home')
 		next()

@@ -13,11 +13,6 @@ new Vue({
 	el:'#root',
 	router,
 	store,
-	watch:{
-			$route:function(to,from){
-				console.log('watch',arguments)
-			}
-		},
 	template:'<App/>',
 	components:{App}
 })

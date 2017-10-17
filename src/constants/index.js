@@ -1,5 +1,5 @@
 //https://news-at.zhihu.com/api/4/news/latest
-
+//`http://127.0.0.1:9001/api/4/news/${id}`
 const BaseUrl="http://127.0.0.1:9001/api/4"
 const latestNews=BaseUrl+'/news/latest'
 const newsDetail=BaseUrl+'/news/'
@@ -14,16 +14,19 @@ const getRecommenders=id=>BaseUrl+`/story/${id}/recommenders`
 const getEditor=id=>BaseUrl+`/editor/${id}/profile-page/android`
 
 const getNewsByDate=date=>BaseUrl+`/news/before/${date}`  //date:20131119
+const getThemeListByDate=(themeId,beforeId)=>BaseUrl+`/theme/${themeId}/before/${beforeId}`
 
-const getThemeListByDate=(sectionId,time)=>`https://news-at.zhihu.com/api/4/section/${sectionId}/before/${time}`
-
-
+const getNewsDetail=id=>BaseUrl+'/news/'+id
+const getDetailExtra=id=>BaseUrl+'/story-extra/'+id
 export default{
 	latestNews,
 	themes,
 	themesIDList,
 	getRecommenders,
 	getEditor,
-	getNewsByDate
+	getNewsByDate,
+	getThemeListByDate,
+	getNewsDetail,
+	getDetailExtra
 }
 

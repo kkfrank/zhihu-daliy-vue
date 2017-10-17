@@ -12,14 +12,8 @@
 
 <script>
 	import TopHeader from '../components/TopHeader'
-	import LeftBar from '../components/LeftBar.vue'
-	import TopImgBox from '../components/TopImgBox.vue'
-	import List from '../components/List.vue'
-	import axios from 'axios'
-	import API from '../constants/index.js'
 	export default{
 		created:function(){
-		    //this.getNews()
 		    this.$store.dispatch({
 		    	type:"getHomeList"
 		    })
@@ -31,13 +25,9 @@
 		},
 		components:{
 			TopHeader,
-			LeftBar,
-			TopImgBox,
-			List
 		},
 		computed:{
 			name(){
-				console.log(this.$store.state.topBar.name)
 				return this.$store.state.topBar.name
 			},
 			list:function(){

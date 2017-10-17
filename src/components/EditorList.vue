@@ -7,7 +7,8 @@
 		</TopHeader>
 		<div class="editor-box">
 			<!-- <router-link :to="'editor/'+item.id" v-for="item in editorList" :key="item.id" class="editor-item"> -->
-			<a  @click.prevent="jumpDetail" v-for="item in editorList" class="editor-item" :data-href="getEditor(item.id)">
+		<!-- 	<a  @click.prevent="jumpDetail" v-for="item in editorList" class="editor-item" :data-href="getEditor(item.id)"> -->
+			<a :href="getEditor(item.id)" target="_blank" v-for="item in editorList" class="editor-item">
 				<div><img :src="item.avatar.replace('http:','https:')"/></div>
 				<div class="editor-profile">
 					<div>{{item.name}}</div>
@@ -20,28 +21,19 @@
 </template>
 
 <script>
-	import  Api from '../constants/'
+	import  Api from '../api/'
 	import TopHeader from '../components/TopHeader'
-	import axios from 'axios'
 	export default{
+		created:function(){
+			if(this.editorList.length===0){//没有则跳转到主页，停留在当前页面刷新，会导致length为0
+				this.$router.push({path:"/"})
+			}
+		},
 		methods:{
-			jumpDetail(ev){
-				console.log(ev.target)
-				axios.get(ev.target.getAttribute('data-href'))
-					.then(data=>{
-						console.log(data)
-					})
-					.catch(err=>{
-						console.log(err)
-					})
-			},
 			getEditor:Api.getEditor,
 			routerBack(){
 				this.$router.back()
 			}
-		/*	function(id){
-				return getEditor(id)
-			}*/
 		},
 		computed:{
 			editorList:function(){

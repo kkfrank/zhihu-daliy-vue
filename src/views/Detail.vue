@@ -7,59 +7,51 @@
 			<div slot="right" class="navbar-right-detail">
 				<span class="navbar-icon"><icon name="share-alt"></icon> </span>
 				<span class="navbar-icon"><icon name="star"></icon> </span>	
-				<span class="navbar-icon"><icon name="commenting"></icon> </span>
-				<span class="navbar-icon"><icon name="thumbs-up"></icon> </span>	
+				<span class="navbar-icon"><icon name="commenting"></icon><span class="ml-6">{{extra.comments}}</span></span>
+				<span class="navbar-icon"><icon name="thumbs-up"></icon><span class="ml-6">{{extra.popularity}}</span></span>	
 			</div>
 		</TopHeader>
 
 		<div class="detial-box">
-			<div class="detail-img-box" :style="{backgroundImage:'url('+detail.image+')'}">
+			<div v-if="detail.image" class="detail-img-box" :style="{backgroundImage:'url('+detail.image+')'}">
 				<!-- <img :src="url" alt="picture"> -->
+				<div class="detail-overlay"></div>
 				<h2>{{detail.title}}</h2>
 				<span>{{detail.image_source}}</span>
 			</div>
-			<div v-html='detail.body'></div>
+			<div v-html='detail.body && detail.body.replace(/http:/g,"https:")' class="detail-content-box"></div>
 		</div>
 	</div>
-
 	
 </template>
 
 <script>
-	import axios from 'axios'
 	import TopHeader from '../components/TopHeader'
+	import {mapState} from 'vuex'
 	export default{
-		data(){
-			return{
-				/*detailHtml:"",
-				url:"",
-				imgSource:"",
-				title:""*/
-				detail:{}
-			}
-		},
+		computed:mapState({
+			detail:state=>state.detail.content,
+			extra:state=>state.detail.extra
+		}),
 		methods:{
 			routerBack(){
 				this.$router.back()
-			},
-			getDetail(){
-				const id=this.$route.params.id
-				axios.get(`http://127.0.0.1:9001/api/4/news/${id}`)
-					.then(data=>{
-						console.log(data)
-						this.detail=data.data
-						/*this.detailHtml=data.data.body
-						this.url=data.data.image
-						this.imgSource=data.data.image_source
-						this.title=data.data.title*/
-					})
-					.catch(err=>{
-						console.log(err)
-					})
+				this.$store.commit('clearDetailAll')
 			}
 		},
 		created:function(){
-			this.getDetail()
+			this.$store.state.prevScrollTop=document.body.scrollTop
+			document.body.scrollTop=0
+			
+			const id=this.$route.params.id
+			this.$store.dispatch({
+				type:"getDetail",
+				id
+			})
+			this.$store.dispatch({
+				type:"getDetailExtra",
+				id
+			})
 		},
 		components:{
 			TopHeader
@@ -69,6 +61,9 @@
 </script>
 
 <style>
+	.detial-box{
+		margin-top: 50px;
+	}
 	.detail-img-box{
 		position: relative;
 	    height: 230px;
@@ -76,14 +71,20 @@
 	    background-size: cover;
     	background-repeat: no-repeat;
     	background-position: 0 -86px;
-    	margin-top: 50px;
+	}
+	.detail-overlay{
+	    width: 100%;
+    	height: 100%;
+		background: rgba(0,0,0,0.3);
 	}
 	.detail-img-box h2{
-		position: absolute;
-	    color: #fff;
+	    position: absolute;
+	    color: #eee;
 	    font-size: 18px;
 	    bottom: 28px;
 	    padding: 0 10px;
+	    font-size: 20px;
+	    font-weight: normal;
 	}
 	.detail-img-box span{
 		position: absolute;
@@ -91,5 +92,55 @@
 		bottom:10px;
 		color: #eee;
 	    font-size: 14px;
+	}
+	.detail-content-box{
+		background-color: #f5f5f5;
+		padding: 18px;
+	}
+	.detail-content-box .answer .meta{
+	    padding: 20px 0;
+	    overflow: hidden;
+	    white-space: nowrap;
+	    text-overflow: ellipsis;
+	}
+	.detail-content-box .avatar{
+	    vertical-align: -7px;
+	    height: 26px;
+	    margin-right: 6px;
+	}
+	.detail-content-box .content p,.detail-content-box .content hr,
+	.detail-content-box .content blockquote,.detail-content-box .headline{
+		margin-bottom: 20px;
+	}
+	.detail-content-box blockquote{
+		border-left: 2px solid #63bbe2;
+   	 	padding-left: 8px;
+	}
+	.detail-content-box a{
+	    color: #01a3ea;
+	}
+	.detail-content-box .heading{
+		color: #999;
+	    margin-bottom: 6px;
+	}
+	.detail-content-box .heading-content{
+		color: #333;
+	}
+	.detail-content-box .view-more{
+	    background-color: #eee;
+	    padding: 4px 0;
+	    text-align: center;
+	}
+	.detail-content-box .view-more a{
+ 		color: #999;
+	}
+	.detail-content-box  .question-title{
+		font-size: 1.2em
+	}
+	.detail-content-box .content-image{
+		width: 100%;
+	}
+	.navbar-icon .ml-6{
+		margin-left:6px
 	}
 </style>
