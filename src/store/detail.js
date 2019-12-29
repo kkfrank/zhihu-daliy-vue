@@ -6,10 +6,10 @@ const detailModule={
 			//body:"",
 		},
 		extra:{
-			comments:"",
-			long_comments:"",
-			short_comments:"",
-			popularity:""
+			comments:'',
+			long_comments:'',
+			short_comments:'',
+			popularity:''
 		}
 	},
 	getters:{
@@ -22,17 +22,17 @@ const detailModule={
 		clearDetailAll(state){
 			state.content={}
 			state.extra={
-				comments:"",
-				long_comments:"",
-				short_comments:"",
-				popularity:""
+				comments:'',
+				long_comments:'',
+				short_comments:'',
+				popularity:''
 			}
 		}
 	},
 	actions:{
 		getDetail(context,{id}){
 			//context.commit('setTopBar',{type:"detail",name:""})
-			context.commit('setTopBar',{type:"detail"})
+			context.commit('setTopBar',{type:'detail'})
 			API.getNewsDetail(id)
 				.then(data=>{
 					context.state.content=data//.data

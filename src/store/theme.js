@@ -55,8 +55,8 @@ const moduleTheme={
 						data:data.data,
 						fresh:true
 					})
-					context.commit("setTopBar",{
-						type:"theme",
+					context.commit('setTopBar',{
+						type:'theme',
 						name:data.data.name
 					})
 					context.commit('setEditorList',data.data.editors)

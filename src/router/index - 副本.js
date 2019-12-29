@@ -21,18 +21,18 @@ const routes=[{
 		main:Detail
 	}
 },{
-	path:"/theme/:id",
+	path:'/theme/:id',
 	components:{
 		main:Theme,
 		leftbar:LeftBar
 	}
 },{
-	path:"/editors",
+	path:'/editors',
 	components:{
 		main:EditorList
 	}
 },{
-	path:"/editor/:id",
+	path:'/editor/:id',
 	component:EditorItem
 },
 {

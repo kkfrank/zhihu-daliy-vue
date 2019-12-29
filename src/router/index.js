@@ -18,14 +18,14 @@ const routes=[{
 	path:'/detail/:id',
 	component:Detail
 },{
-	path:"/theme/:id",
+	path:'/theme/:id',
 	component:Theme
 },{
-	path:"/editors",
+	path:'/editors',
 	component:EditorList
 	
 },{
-	path:"/editor/:id",
+	path:'/editor/:id',
 	component:EditorItem
 },
 {

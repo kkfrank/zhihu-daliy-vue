@@ -6,7 +6,7 @@ var arr=[1,2,[3,4],[3,4,[5],6,7],8,[9,10],11]
 var ans=[]
 function flatten1(arr){
 	for(var i=0,item;item=arr[i++];){
-		if(Object.prototype.toString.call(item)==="[object Array]"){
+		if(Object.prototype.toString.call(item)==='[object Array]'){
 			flatten(item)
 		}else{
 			ans.push(item)
@@ -97,7 +97,7 @@ function _partition(arr,lo,hi){
 
 
 var config1={
-	render:"#t1",
+	render:'#t1',
 	friends:[1,2,3,4,5],
 	async:{
 		fn:function(){
@@ -131,7 +131,7 @@ function extend(){
 	}
 	return target
 }
-var target=extend({},config1,{render:"#t2"})
+var target=extend({},config1,{render:'#t2'})
 /*console.log('----------')
 console.log(target)
 console.log(target.friends===config1.friends)*/

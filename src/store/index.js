@@ -19,8 +19,8 @@ const store=new Vuex.Store({
 		//searchDay:today,//知乎日报查询日期：查询2016年11月18日的消息，应为 20161119
 		isLeftBarShow:false,
 		topBar:{
-			type:"",//list;theme;detail
-			name:""
+			type:'',//list;theme;detail
+			name:''
 		},
 		prevScrollTop:0,//保存列表进入详情页面之前的scrollTop值
 		editorList:[]
@@ -41,11 +41,11 @@ const store=new Vuex.Store({
 		},
 		hideLeftBar(state){
 			state.isLeftBarShow=false
-			document.body.style=""
+			document.body.style=''
 		},
 		showLeftBar(state){
 			state.isLeftBarShow=true
-			document.body.style="overflow:hidden;padding-right:0px;"
+			document.body.style='overflow:hidden;padding-right:0px;'
 		},
 		setEditorList(state,data){
 			state.editorList=data
@@ -62,8 +62,8 @@ const store=new Vuex.Store({
 			}
 			context.commit('setLoading',true)
 			var type=context.state.topBar.type
-			var url="",list=[];
-			if(type==="list"){//主页加载更多
+			var url='',list=[]
+			if(type==='list'){//主页加载更多
 				var list=context.state.home.homeList
 				var beforeDate=list[list.length-1].date//知乎api查询日期需+1
 				API.getNewsByDate(beforeDate)

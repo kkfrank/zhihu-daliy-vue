@@ -21,7 +21,7 @@ const homeModule={
 	},
 	actions:{
 		getHomeLatest(context){
-			context.commit('setTopBar',{type:"list",name:"首页"})
+			context.commit('setTopBar',{type:'list',name:'首页'})
 			document.body.scrollTop=0
 			API.getHomeLatest()
 				.then(data=>{

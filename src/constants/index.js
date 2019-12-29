@@ -1,6 +1,6 @@
 //https://news-at.zhihu.com/api/4/news/latest
 //`http://127.0.0.1:9001/api/4/news/${id}`
-const BaseUrl="http://127.0.0.1:9001/api/4"
+const BaseUrl='http://127.0.0.1:9001/api/4'
 const latestNews=BaseUrl+'/news/latest'
 const newsDetail=BaseUrl+'/news/'
 //知乎日报的生日为 2013 年 5 月 19 日，若 before 后数字小于 20130520 ，只会接收到空消息
