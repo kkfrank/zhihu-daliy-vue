@@ -1,88 +1,118 @@
-var webpack=require('webpack')
-var BundleAnalyzerPlugin=require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-var ExtractTextPlugin=require('extract-text-webpack-plugin')
+const webpack=require('webpack')
+const path = require('path');
+const BundleAnalyzerPlugin=require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const ExtractTextPlugin=require('extract-text-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const pkg = require('./package.json');
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports={
-	entry:{
-		bundle:'./src/index.js',
-		vendor:['vue-awesome','vue','vue-router','moment','vue-awesome/icons','vuex','axios','es6-promise']
-	},
+    devtool:'cheap-eval-source-map',
+    entry:[
+    	path.join(__dirname, './src/index.js')
+	],
 	output:{
-		publicPath:"/assets",
-		path:__dirname+'/dist',
-		filename:'[name].js'
+        publicPath: '/',
+        path: path.join(__dirname, '/dev'),
+        filename: 'bundle.js'
 	},
 	module:{
 		rules:[
-	/*	{
-			test:/\.scss$/,
-			use:[{
-				loader:'style-loader'
-			},{
-				loader:'css-loader'
-			},{
-				loader:'sass-loader'
-			}]
-		},*/
-		{
-			test:/\.vue$/,
-			use:[{
-				loader:'vue-loader',
-				options:{
-					extractCSS:true
-				}
-			}]
-		},
-		{
-			test:/\.js$/,
-			exclude:/node_modules/,
-			use:[{
-				loader:'babel-loader'
-			}]
-		},{
-			test:/\.(png|jpg|gif)$/,
-			use:[{
-				loader:'file-loader'
-			}]
-		}]
+            {
+                test: /\.css$/,
+                use: [
+                    'vue-style-loader',
+                    'css-loader'
+                ],
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    'vue-style-loader',
+                    'css-loader',
+                    'sass-loader'
+                ],
+            },
+            {
+                test: /\.sass$/,
+                use: [
+                    'vue-style-loader',
+                    'css-loader',
+                    'sass-loader?indentedSyntax'
+                ],
+            },
+            {
+                test: /\.js$/,
+                exclude:/node_modules/,
+                use:[{
+                    loader:'babel-loader'
+                }]
+            },{
+                test:/\.(png|jpg|gif)$/,
+                use:[{
+                    loader:'file-loader'
+                }]
+            },
+            {
+                test:/\.vue$/,
+                use:[{
+                    loader:'vue-loader',
+                    options:{
+                        // loaders: {
+                        //     'scss': [
+                        //         'vue-style-loader',
+                        //         'css-loader',
+                        //         'sass-loader'
+                        //     ],
+                        //     'sass': [
+                        //         'vue-style-loader',
+                        //         'css-loader',
+                        //         'sass-loader?indentedSyntax'
+                        //     ]
+                        // }
+                        // extractCSS:true
+                    }
+                }]
+            }]
 	},
 	resolve:{
-		extensions:['.js','.vue'],
+        extensions: ['.js', '.vue', '.scss', '.css'],
+		// extensions:['.js','.vue'],
 		alias:{
 			'vue':'vue/dist/vue.js'
 		}
 	},
 	devServer:{
-		//compress:true
+        contentBase: './dev', // 本地服务器所加载的页面所在的目录
+        historyApiFallback: true, // 为了SPA应用服务
+        inline: true, //实时刷新
+        hot: true,  // 使用热加载插件 HotModuleReplacementPlugin
 		port:9000
 	},
-	devtool:'cheap-eval-source-map',
 	plugins:[
 		//new BundleAnalyzerPlugin(),
+        new VueLoaderPlugin(),
+        // 独立css文件
+        new ExtractTextPlugin({
+            filename: 'css/main.css',
+            disable: true
+        }),
+        // 提出公共模块
 		new webpack.optimize.CommonsChunkPlugin({
-			name:"vendor"
+			name:"vendor",
+		    filename: 'base.js'
 		}),
-		//new ExtractTextPlugin('style.css')
-		new ExtractTextPlugin('[name].css')
+	    // html 模板插件
+        new HtmlWebpackPlugin({
+            filename:'./index.html',
+            template: __dirname + '/index.template.html',
+            inject: true
+        }),
+        // 热加载插件
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.DefinePlugin({
+            '$NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+        }),
+        new BundleAnalyzerPlugin()
 	]
-}
-if(process.env.NODE_ENV==='production'){
-	//module.exports.devtool="#source-map"
-	module.exports.devtool=false
-	module.exports.plugins=(module.exports.plugins || []).concat([
-		new webpack.DefinePlugin({
-			'process.env':{
-				NODE_ENV:"production"
-			}
-		}),
-		new webpack.optimize.UglifyJsPlugin({
-			compress:{
-				warnings:false
-			}
-		})
-	])
-}else{
-	module.exports.plugins=(module.exports.plugins || []).concat([
-		new BundleAnalyzerPlugin()
-	])
 }

@@ -1,0 +1,2 @@
+export const GET_NEWS_DETAIL = 'GET_NEWS_DETAIL'
+export const GET_NEWS_EXTRA = 'GET_NEWS_EXTRA'

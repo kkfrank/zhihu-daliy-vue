@@ -1,40 +1,24 @@
 <template>
 	<div class="list-box">
-			<router-link to="/editors" class="list-title">
-				<h3>主编</h3>
-				<img v-for="item in newList.editors" :src="item.avatar.replace('http:','https:')"></img>
-			</router-link>
-
+		<div v-for="(data, index) in list">
+			<h3 class="list-title">
+				{{ index===0 ? '' : data.date }}
+			</h3>
 			<ul>
-				<li v-for="item in newList.stories">
-					<router-link :to="'/detail/'+item.id">
-						<span>{{item.title}}</span>
-						<img v-if="item.images" v-bind:src="item.images && item.images[0].replace('http:','https:')">
+				<li v-for="item in data.stories">
+					<router-link :to="`/details/${item.id}`">
+						<span>{{ item.title }}</span>
+						<img v-if="item.images" v-bind:src="item.images[0]">
 					</router-link>
 				</li>
 			</ul>	
+		</div>
 	</div>
 </template>
 
 <script>
-	import moment from 'moment'
-	require('es6-promise').polyfill();
 	export default{
-		data(){
-			return{
-				today:moment().add(0,'days').format('YYYYMMDD')
-			}
-		},
-		computed:{
-			newList(){
-				var data={...this.list[0]}
-				for(var i=1,item;item=this.list[i++];){
-					data.stories=data.stories.concat(item.stories)
-				}
-				return {...data}
-			},
-		},
-		props:['list'],
+        props:['list']
 	}
 </script>
 

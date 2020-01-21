@@ -1,0 +1,4 @@
+export const GET_LATEST_NEWS = 'GET_LATEST_NEWS'
+export const GET_BEFORE_NEWS = 'GET_BEFORE_NEWS'
+
+export const SAVE_SCROLLTOP = 'SAVE_SCROLLTOP'

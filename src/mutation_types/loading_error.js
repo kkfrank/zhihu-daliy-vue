@@ -1,0 +1,4 @@
+export const SHOW_LOADING = 'SHOW_LOADING'
+export const HIDE_LOADING = 'HIDE_LOADING'
+export const SET_ERROR_MSG = 'SET_ERROR_MSG'
+export const CLEAR_ERROR_MSG = 'CLEAR_ERROR_MSG'

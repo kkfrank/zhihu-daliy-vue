@@ -1,40 +1,25 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Home from '../views/Home.vue'
-import LeftBar from '../components/LeftBar'
-import Theme from '../views/Theme'
-import Detail from '../views/Detail.vue'
-import EditorList from '../components/EditorList'
-import EditorItem from '../components/EditorItem'
+import Home from '../pages/Home/Home.vue'
+import NewsDetail from '../pages/NewsDetail/NewsDetail.vue'
+import CommentList from '../pages/CommentList/CommentList.vue'
 import About from '../components/About.vue'
 
 Vue.use(VueRouter)
 
 const routes=[{
-	path:'/about',
-	component:About
+	path: '/about',
+	component: About
 },{
-	path:'/detail/:id',
-	component:Detail
+	path: '/details/:id',
+	component: NewsDetail
 },{
-	path:'/theme/:id',
-	component:Theme
+	path: '/details/:id/comments',
+    component: CommentList
 },{
-	path:'/editors',
-	component:EditorList
-	
-},{
-	path:'/editor/:id',
-	component:EditorItem
-},
-{
 	path:'/',
-	component:Home,
-/*	beforeEnter(to,from,next){
-		console.log('enter home')
-		next()
-	}*/
+	component: Home
 }]
 
 export default new VueRouter({

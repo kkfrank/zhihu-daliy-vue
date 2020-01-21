@@ -12,46 +12,45 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.navbar{
 		position: fixed;
 		top: 0;
 		left: 0;
 		width:100%;
-		display: flex;
 		align-items:center;
 		height:50px;
+		line-height: 50px;
 		background-color: #00a2ea;
 		color:#fff;
 		z-index: 1;
-	    padding: 0 16px;
 	}
 	.navbar-title{
-		flex:8;
+		float: left;
 	    font-size: 17px;
     	font-weight: normal;
+		text-align: center;
+		width: calc(100% - 80px);
 	}
 	.navbar-left{
-		flex:1;
-		margin-top: 4px;
+		float: left;
+		display: inline-block;
+		width: 50px;
+		text-align: center;
+		cursor: pointer;
+		&:hover{
+			background-color: #0589c3;
+	 	}
 	}
 	.navbar-right{
-		flex: 1;
-	    display: flex;
-    	justify-content: space-between;
-	}
-	.navbar-right-theme{
-		flex:1;
-		text-align: center;
+		float: right;
+		span {
+			margin-right: 22px;
+		}
 	}
 	.navbar-right-detail{
+		float: right;
 		flex:3;
 		text-align: right;
-	}
-	.navbar-right-detail span{
-		margin-right: 22px;
-	}
-	.navbar-right span{
-	    /*margin-left: 22px;*/
 	}
 </style>

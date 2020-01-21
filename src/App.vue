@@ -1,6 +1,9 @@
 <template>
-	<div>
-		<div class="loading"></div>
+	<div id="app">
+		<Modal :visible = 'errorMsg!==""'  v-on:on-ok="handleOk" v-on:on-cancel="handleCancel">
+			<p slot="content"> {{ errorMsg }}</p>
+		</Modal>
+		<Loading :loading= "loading"></Loading>
 		<router-view></router-view>
 <!-- 		<router-view name="main"></router-view>
 		<router-view name="leftbar"></router-view> -->
@@ -8,80 +11,31 @@
 </template>
 
 <script>
+	import Modal from './components/Modal.vue'
+    import Loading from './components/Loading.vue'
+
 	export default{
 		created(){
-		    this.$store.dispatch({//获取leftbar中theme的种类
-		    	type:"getThemesTypes"
-		    })
-
-			var that=this,isUp=true
-		    window.addEventListener('scroll',function(ev){
-		    	var type=that.$store.state.topBar.type
-	    	 	if(type!=="list" && type !=="theme"){
-		    		return
-		    	}
-		    	if(document.body.scrollTop===0){//到顶了
-		    		console.log('到顶了',type)
-		    		isUp=true
-		    	}else{
-		    		isUp=false
-		    	}
-		    	//if(document.body.scrollTop+document.documentElement.clientHeight>=document.documentElement.scrollHeight){
-	    		if(document.body.scrollTop !==0 && document.body.scrollTop+document.documentElement.clientHeight===document.documentElement.scrollHeight){
-		    		console.log('到底了',type,that.$store.state.topBar.type)
-		    		if(type==="list" || type==="theme"){//
-		    			that.$store.dispatch({
-			    			type:"loadMore",
-			    			id:that.$route.params.id
-			    		})	
-		    		}
-		    	}
-		    })
-		    var validTouch=false,startY=0,prevMoveY=0
-	
-		    window.addEventListener('touchstart',function(ev){//刷新
-		    /*	var type=that.$store.state.topBar.type
-		    	if(type!=="list" && type !=="theme"){
-		    		return
-		    	}*/
-		    	var main=document.querySelector('.main')
-		    	if(isUp && main && (ev.target===main || main.contains(ev.target))){//滑动的是main元素
-		    		validTouch=true
-		    		prevMoveY=startY=ev.touches[0].pageY
-		    	}else{
-		    		validTouch=false
-		    	}
-		    })
-	      	window.addEventListener('touchmove',function(ev){
-  			    var loading=document.querySelector('.loading')
-	      		if(!validTouch){
-	      			return
-	      		}
-	      		var y=ev.touches[0].pageY
-	      		var prevY=parseInt(loading.style.top || 0)
-	      		var changedY=y-prevMoveY
-	      		prevMoveY=y
-	      		y=prevY+changedY
-	      		if(y>=100) y=100
-      		    loading.style.top=y+"px"
-		    })
-	        window.addEventListener('touchend',function(ev){
-	        	var type=that.$store.state.topBar.type
-	        	if(!validTouch){
-	      			return
-	      		}
-      			if(type==="list"){//刷新主页
-	    			that.$store.dispatch('getHomeLatest')
-	    		}else{
-					that.$store.dispatch({
-		    			type:"getThemeListNow",
-		    			id:that.$route.params.id
-		    		})
-	    		}
-	      		
-	      		var loading=document.querySelector('.loading')
-	      		loading.style.top=0
-		    })
+		},
+		computed: {
+		    loading: function () {
+                return this.$store.state.loadingError.loading
+            },
+			errorMsg: function () {
+				return this.$store.state.loadingError.errorMsg
+            }
+		},
+		methods: {
+            handleOk(){
+                this.$store.commit('clearErrorMsg')
+			},
+            handleCancel(){
+                this.$store.commit('clearErrorMsg')
+			}
+		},
+		components: {
+            Modal,
+            Loading
 		}
 	}
 </script>
@@ -102,28 +56,32 @@
 	li{
 		list-style: none;
 	}
-	.loading{
-	    position: fixed;
-	    width: 40px;
-	    height: 40px;
-	    z-index: 1;
-	    left: 44%;
-	    top: 0;
-	    border: 4px solid green;
-	    border-radius: 50%;
-	    border-right: 4px solid transparent;
-	    border-top: 4px solid transparent;
-	    transform: rotate(45deg);
-	    animation: rotate .6s infinite linear;
-	    margin-top: 10px;
+	.btn{
+		color: #fff;
+		background-color: #1890ff;
+		border: 1px solid #1890ff;
+		padding: 6px 12px;
+		border-radius: 4px;
+		cursor: pointer;
+		white-space: nowrap;
+		outline: 0;
 	}
-
-	@keyframes rotate{
-		from {
-			transform: rotate(45deg);
-		}
-		to{
-			transform: rotate(405deg);
-		}
+	.btn:hover{
+		color: #fff;
+		background-color: #40a9ff;
+		border-color: #40a9ff;
 	}
+	.btn.default{
+		background-color: #fff;
+		border-color: #d9d9d9;
+		color: rgba(0,0,0,0.65);
+	}
+	.btn.disabled{
+		color: rgba(0,0,0,0.25);
+		background-color: #f5f5f5;
+		border-color: #d9d9d9;
+		cursor: not-allowed;
+	}
+	.hide{ display: none; }
+	.clear:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
 </style>
