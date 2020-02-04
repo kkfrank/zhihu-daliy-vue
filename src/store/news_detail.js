@@ -30,7 +30,6 @@ export default {
             state.extra.popularityCount = data.popularity
 		},
         setNewsDetailScrollTop(state, data){
-		    console.log(',setNewsDetailScrollTop', data)
 		  state.scrollTop = data
         },
         clearNewsDetail(state){

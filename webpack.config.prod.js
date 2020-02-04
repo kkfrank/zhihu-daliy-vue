@@ -14,7 +14,7 @@ module.exports={
 		// vendor:['vue-awesome','vue','vue-router','moment','vue-awesome/icons','vuex','axios','es6-promise']
 	},
 	output:{
-		path: __dirname+'/build/assets',
+		path: __dirname + '/build/assets',
 		publicPath: "./assets/",
 		filename: 'js/[name].[chunkhash:8].js'
 	},
@@ -22,18 +22,26 @@ module.exports={
 		rules:[
 		  {
                 test: /\.css$/,
-                use: [
-                    'vue-style-loader',
-                    'css-loader'
-                ],
+                loader: ExtractTextPlugin.extract({
+                   use: 'css-loader',
+                   fallback: 'vue-style-loader'
+                }),
+                // use: [
+                //     'vue-style-loader',
+                //     'css-loader'
+                // ],
             },
             {
                 test: /\.scss$/,
-                use: [
-                    'vue-style-loader',
-                    'css-loader',
-                    'sass-loader'
-                ],
+                loader: ExtractTextPlugin.extract({
+                    use: [ 'css-loader', 'sass-loader'],
+                    fallback: 'vue-style-loader'
+                }),
+                // use: [
+                //     'vue-style-loader',
+                //     'css-loader',
+                //     'sass-loader'
+                // ],
             },
             {
                 test: /\.sass$/,
@@ -77,13 +85,13 @@ module.exports={
 	plugins:[
         new VueLoaderPlugin(),
         new webpack.DefinePlugin({
-            NODE_ENV:"production"
+            'process.env.NODE_ENV': '"production"'
         }),
         new ExtractTextPlugin('css/[name].[chunkhash:8].css'),
         // 提供公共代码vendor
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
-            filename: 'js/[name].[chunkhash:8].js'
+            //filename: 'js/[name].[chunkhash:8].js'
         }),
         // html 模板插件
         new HtmlWebpackPlugin({

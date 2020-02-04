@@ -8,13 +8,16 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports={
     devtool:'cheap-eval-source-map',
-    entry:[
-    	path.join(__dirname, './src/index.js')
-	],
+    entry:{
+        bundle:'./src/index.js',
+        // 将第三方依赖（node_modules）的库打包
+        vendor: Object.keys(pkg.dependencies)
+
+    },
 	output:{
         publicPath: '/',
         path: path.join(__dirname, '/dev'),
-        filename: 'bundle.js'
+        filename: 'js/[name].js'
 	},
 	module:{
 		rules:[
@@ -87,7 +90,7 @@ module.exports={
         historyApiFallback: true, // 为了SPA应用服务
         inline: true, //实时刷新
         hot: true,  // 使用热加载插件 HotModuleReplacementPlugin
-		port:9000
+		port: 9000
 	},
 	plugins:[
 		//new BundleAnalyzerPlugin(),
@@ -99,19 +102,18 @@ module.exports={
         }),
         // 提出公共模块
 		new webpack.optimize.CommonsChunkPlugin({
-			name:"vendor",
-		    filename: 'base.js'
+			name: "vendor"
 		}),
 	    // html 模板插件
         new HtmlWebpackPlugin({
-            filename:'./index.html',
+            filename: './index.html',
             template: __dirname + '/index.template.html',
             inject: true
         }),
         // 热加载插件
         new webpack.HotModuleReplacementPlugin(),
         new webpack.DefinePlugin({
-            '$NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+            'process.env.NODE_ENV': '"dev"'
         }),
         new BundleAnalyzerPlugin()
 	]

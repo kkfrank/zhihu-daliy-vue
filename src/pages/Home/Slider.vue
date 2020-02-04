@@ -26,7 +26,6 @@
 		mounted: function () {
             let that = this;
             addTouchEvent(document.querySelector('.slider-box'), function (event) {
-                console.log(event)
                 if(event.type === 'touchend'){
 					if(event.directionX === 'left'){
                         if(that.active === that.list.length - 1){

@@ -38,6 +38,11 @@
     "start": "webpack-dev-server --open",
     "build": "rimraf build && NODE_ENV=production webpack --config ./webpack.config.prod.js --progress --colors"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
     "*.{js}": [
       "eslint --fix",

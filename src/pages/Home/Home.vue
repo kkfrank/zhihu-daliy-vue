@@ -34,12 +34,11 @@
 			let that=this
             document.documentElement.scrollTop = this.scrollTop
             listenScrollBottom(function () {
-                console.log('to bttom hhhh')
+                console.log('to bttom')
                 that.$store.dispatch({ type: "getBeforeNews" })
             })
         },
 		destroyed: function () {
-			console.log('newlist  destroyed')
             removeListenScrollBottom()
         },
 	 	methods: {

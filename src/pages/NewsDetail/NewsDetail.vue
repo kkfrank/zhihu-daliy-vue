@@ -48,7 +48,6 @@
 		},
         beforeRouteEnter(to ,from, next){
             const scrollTop = document.documentElement.scrollTop
-			console.log(from)
 			next(vm => {
                 if(from.path === '/'){// from list page, clear detail data and save before scrollTop postion
                     vm.$store.commit('setNewsListScrollTop', scrollTop)
@@ -58,11 +57,9 @@
 		},
         beforeRouteLeave(to, from, next){
             const scrollTop = document.documentElement.scrollTop
-            console.log(to)
 			let path = to.path
             next(vm => {
                 if(path === '/'){
-                    console.log('mmmmmmmmmm')
                     vm.$store.commit('clearNewsDetail')
 				}
 //				if(to.path.test(/^\/details\/[\d]+\/comments/)){// to commnets page, save scrollTop postion
@@ -82,7 +79,6 @@
 		created: function(){
 			const id= this.$route.params.id
             const { body, scrollTop } = this.$store.state.newsDetail
-			console.log('bidy',body)
 			if(body){
                 document.documentElement.scrollTop = scrollTop
 			    return
@@ -95,7 +91,6 @@
             //document.documentElement.scrollTop = 0
         },
 		destroyed: function () {
-		    console.log('newDetail destroyed')
 			//this.$store.commit('clearNewsDetail')
         },
 		components: {
@@ -111,7 +106,7 @@
 			float: left;
 			display: inline-block;
 			min-width: 50px;
-			padding: 1px 16px 0;
+			padding: 0 16px;
 			text-align: center;
 			height: 100%;
 			cursor: pointer;
