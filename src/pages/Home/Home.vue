@@ -1,8 +1,7 @@
 <template>
 	<div class="container">
-		<TopHeader title="知乎日报">
+		<TopHeader title="知乎日报(建议小屏查看)">
 			<div class="navbar-right" slot="right">
-
 			</div>
 		</TopHeader>
 		<div class="main">

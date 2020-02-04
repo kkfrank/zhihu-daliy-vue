@@ -78,7 +78,7 @@
 		float: left;
 		width: 20%;
 		height: 100%;
-		background-size: cover;
+		background-size: 100% 100%;
 	}
 	.slider-link div{
 		width: 100%;

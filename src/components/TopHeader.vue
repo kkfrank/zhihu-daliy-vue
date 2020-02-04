@@ -26,11 +26,11 @@
 		z-index: 1;
 	}
 	.navbar-title{
-		float: left;
+		/*float: left;*/
 	    font-size: 17px;
     	font-weight: normal;
 		text-align: center;
-		width: calc(100% - 80px);
+		/*width: calc(100% - 80px);*/
 	}
 	.navbar-left{
 		float: left;

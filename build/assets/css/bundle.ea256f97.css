@@ -69,7 +69,7 @@ li{
 }
 .clear:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0;
 }
-.navbar{position:fixed;top:0;left:0;width:100%;align-items:center;height:50px;line-height:50px;background-color:#00a2ea;color:#fff;z-index:1}.navbar-title{float:left;font-size:17px;font-weight:normal;text-align:center;width:calc(100% - 80px)}.navbar-left{float:left;display:inline-block;width:50px;text-align:center;cursor:pointer}.navbar-left:hover{background-color:#0589c3}.navbar-right{float:right}.navbar-right span{margin-right:22px}.navbar-right-detail{float:right;flex:3;text-align:right}
+.navbar{position:fixed;top:0;left:0;width:100%;align-items:center;height:50px;line-height:50px;background-color:#00a2ea;color:#fff;z-index:1}.navbar-title{font-size:17px;font-weight:normal;text-align:center}.navbar-left{float:left;display:inline-block;width:50px;text-align:center;cursor:pointer}.navbar-left:hover{background-color:#0589c3}.navbar-right{float:right}.navbar-right span{margin-right:22px}.navbar-right-detail{float:right;flex:3;text-align:right}
 
 .slider-box{
 		position: relative;
@@ -94,7 +94,7 @@ li{
 		float: left;
 		width: 20%;
 		height: 100%;
-		background-size: cover;
+		background-size: 100% 100%;
 }
 .slider-link div{
 		width: 100%;
