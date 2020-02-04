@@ -59,9 +59,9 @@
             const scrollTop = document.documentElement.scrollTop
 			let path = to.path
             next(vm => {
-                if(path === '/'){
-                    vm.$store.commit('clearNewsDetail')
-				}
+//                if(path === '/'){
+//                    vm.$store.commit('clearNewsDetail')
+//				}
 //				if(to.path.test(/^\/details\/[\d]+\/comments/)){// to commnets page, save scrollTop postion
 //                    console.log('not clearNewsDetail')
 //                    vm.$store.commit('setNewsDetailScrollTop', scrollTop)
@@ -73,6 +73,7 @@
 		},
 		methods: {
 			goBack(){
+                this.$store.commit('clearNewsDetail')
 				this.$router.back()
 			}
 		},

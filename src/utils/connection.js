@@ -3,7 +3,6 @@ import axios from 'axios'
 const corsUrl = 'https://cors-anywhere.herokuapp.com/'
 //https://news-at.zhihu.com/api/4/news/latest
 let BaseUrl = 'http://127.0.0.1:9001/api/4'
-
 if(process.env.NODE_ENV === 'production'){
     BaseUrl = corsUrl + 'https://news-at.zhihu.com/api/4'
 }
