@@ -17,24 +17,33 @@ module.exports={
 	output:{
         publicPath: '/',
         path: path.join(__dirname, '/dev'),
-        filename: 'js/[name].js'
+        filename: 'js/[name].js',
+        chunkFilename: 'js/[name].js'
 	},
 	module:{
 		rules:[
             {
                 test: /\.css$/,
-                use: [
-                    'vue-style-loader',
-                    'css-loader'
-                ],
+                loader: ExtractTextPlugin.extract({
+                    use: 'css-loader',
+                    fallback: 'vue-style-loader'
+                }),
+                // use: [
+                //     'vue-style-loader',
+                //     'css-loader'
+                // ],
             },
             {
                 test: /\.scss$/,
-                use: [
-                    'vue-style-loader',
-                    'css-loader',
-                    'sass-loader'
-                ],
+                loader: ExtractTextPlugin.extract({
+                    use: [ 'css-loader', 'sass-loader'],
+                    fallback: 'vue-style-loader'
+                }),
+                // use: [
+                //     'vue-style-loader',
+                //     'css-loader',
+                //     'sass-loader'
+                // ],
             },
             {
                 test: /\.sass$/,
@@ -98,8 +107,9 @@ module.exports={
         // 独立css文件
         new ExtractTextPlugin({
             filename: 'css/main.css',
-            disable: true
+            // disable: true
         }),
+
         // 提出公共模块
 		new webpack.optimize.CommonsChunkPlugin({
 			name: "vendor"

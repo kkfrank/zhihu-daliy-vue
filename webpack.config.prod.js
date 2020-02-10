@@ -5,6 +5,7 @@ const ExtractTextPlugin=require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const pkg = require('./package.json');
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');//1,3 version
 
 module.exports={
 	entry:{
@@ -23,25 +24,29 @@ module.exports={
 		  {
                 test: /\.css$/,
                 loader: ExtractTextPlugin.extract({
-                   use: 'css-loader',
-                   fallback: 'vue-style-loader'
+                   fallback: 'vue-style-loader',
+                   use: [{
+                           loader: 'css-loader',
+                           options: {
+                               minimize: true
+                           }
+                         }],
+
                 }),
-                // use: [
-                //     'vue-style-loader',
-                //     'css-loader'
-                // ],
             },
             {
                 test: /\.scss$/,
                 loader: ExtractTextPlugin.extract({
-                    use: [ 'css-loader', 'sass-loader'],
-                    fallback: 'vue-style-loader'
-                }),
-                // use: [
-                //     'vue-style-loader',
-                //     'css-loader',
-                //     'sass-loader'
-                // ],
+                    fallback: 'vue-style-loader',
+                    use: [{
+                            loader: 'css-loader',
+                            options: {
+                                minimize: true
+                            }
+                         },{
+                            loader: 'sass-loader',
+                         }]
+                })
             },
             {
                 test: /\.sass$/,
@@ -84,15 +89,19 @@ module.exports={
 	devtool: false,
 	plugins:[
         new VueLoaderPlugin(),
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': '"production"'
-        }),
+        // 加署名
+        new webpack.BannerPlugin("Copyright by frank"),
         new ExtractTextPlugin('css/[name].[chunkhash:8].css'),
         // 提供公共代码vendor
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
             //filename: 'js/[name].[chunkhash:8].js'
         }),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': '"production"'
+        }),
+        //压缩js，用的低版本，最新版本不支持webpack3
+        new UglifyJsPlugin(),
         // html 模板插件
         new HtmlWebpackPlugin({
             filename:'../index.html',
@@ -101,7 +110,7 @@ module.exports={
                 removeComments: true,
                 collapseWhitespace: false
             },
-            chunksSortMode: 'dependency'
+           // chunksSortMode: 'dependency'
         }),
 
     ]
